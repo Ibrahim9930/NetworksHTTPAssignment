@@ -5,6 +5,11 @@
  */
 package httpassignmentclient;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author masri
@@ -14,7 +19,7 @@ public class ChangePasswordFrame extends javax.swing.JFrame {
     /**
      * Creates new form ChangePasswordFrame
      */
-    public ChangePasswordFrame(HTTPAssignmentClient client,String employeeID) {
+    public ChangePasswordFrame(HTTPAssignmentClient client, String employeeID) {
         initComponents();
         this.client = client;
         this.employeeID = employeeID;
@@ -30,9 +35,11 @@ public class ChangePasswordFrame extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        passwordTF = new javax.swing.JPasswordField();
+        confrimPasswordTF = new javax.swing.JPasswordField();
         changePasswordBtn = new javax.swing.JButton();
         errorLbl = new javax.swing.JLabel();
+        passwordTF = new javax.swing.JPasswordField();
+        jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -45,44 +52,77 @@ public class ChangePasswordFrame extends javax.swing.JFrame {
             }
         });
 
+        jLabel2.setText("Confirm Password");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(changePasswordBtn)
-                    .addComponent(jLabel1)
-                    .addComponent(passwordTF, javax.swing.GroupLayout.DEFAULT_SIZE, 174, Short.MAX_VALUE)
-                    .addComponent(errorLbl, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(24, Short.MAX_VALUE))
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                        .addComponent(passwordTF)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                        .addComponent(changePasswordBtn)
+                                                        .addComponent(jLabel1)
+                                                        .addComponent(confrimPasswordTF, javax.swing.GroupLayout.DEFAULT_SIZE, 174, Short.MAX_VALUE)
+                                                        .addComponent(errorLbl, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                                .addComponent(jLabel2)))
+                                .addContainerGap(24, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(31, 31, 31)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(passwordTF, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(errorLbl, javax.swing.GroupLayout.DEFAULT_SIZE, 24, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
-                .addComponent(changePasswordBtn)
-                .addContainerGap())
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(jLabel1)
+                                .addGap(18, 18, 18)
+                                .addComponent(passwordTF, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel2)
+                                .addGap(18, 18, 18)
+                                .addComponent(confrimPasswordTF, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
+                                .addComponent(errorLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(changePasswordBtn)
+                                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>                        
 
-    private void changePasswordBtnActionPerformed(java.awt.event.ActionEvent evt) {                                                  
+    private void changePasswordBtnActionPerformed(java.awt.event.ActionEvent evt) {
+        boolean success = false;
+        MessageDigest md = null;
+        try {
+            md = MessageDigest.getInstance("SHA-256");
+        } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(LoginFrame.class.getName()).log(Level.SEVERE, null, ex);
+            return;
+        }
+        String password = new String(this.passwordTF.getPassword());
+        md.update(password.getBytes());
+        byte[] hashedBytes = md.digest();
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < hashedBytes.length; i++) {
+            sb.append(Integer.toString((hashedBytes[i] & 0xff) + 0x100, 16).substring(1));
+        }
+        String hashedPassword = sb.toString();
         String newPassword = new String(this.passwordTF.getPassword());
-        boolean success = client.changePassword(employeeID, newPassword);
-        if(success)
-           this.dispose();
-        else
+        String passwordConfirmation = new String(this.confrimPasswordTF.getPassword());
+        if (!newPassword.equals(passwordConfirmation)) {
+            this.errorLbl.setText("Passwords don't match");
+            return;
+        }
+        this.errorLbl.setText("");
+        success = client.changePassword(employeeID, hashedPassword);
+        if (success) {
+            this.dispose();
+        } else {
             this.errorLbl.setText("A problem occured");
-    }                                                 
+        }
+    }
 
     /**
      * @param args the command line arguments
@@ -114,7 +154,7 @@ public class ChangePasswordFrame extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ChangePasswordFrame(new HTTPAssignmentClient(),"").setVisible(true);
+                new ChangePasswordFrame(new HTTPAssignmentClient(), "").setVisible(true);
             }
         });
     }
@@ -122,8 +162,10 @@ public class ChangePasswordFrame extends javax.swing.JFrame {
     private String employeeID;
     // Variables declaration - do not modify                     
     private javax.swing.JButton changePasswordBtn;
+    private javax.swing.JPasswordField confrimPasswordTF;
     private javax.swing.JLabel errorLbl;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPasswordField passwordTF;
     // End of variables declaration                   
 }

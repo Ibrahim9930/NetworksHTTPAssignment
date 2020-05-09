@@ -5,7 +5,11 @@
  */
 package httpassignmentclient;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.json.simple.JSONObject;
 
 /**
@@ -54,7 +58,7 @@ public class LoginFrame extends javax.swing.JFrame {
 
         passwordLbl.setText("Password");
 
-        serverCB.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "PHP", "Servlet" }));
+        serverCB.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"PHP", "Servlet"}));
         serverCB.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 serverCBActionPerformed(evt);
@@ -63,7 +67,7 @@ public class LoginFrame extends javax.swing.JFrame {
 
         serverLbl.setText("Server");
 
-        methodCB.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "GET", "POST" }));
+        methodCB.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"GET", "POST"}));
         methodCB.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 methodCBActionPerformed(evt);
@@ -87,100 +91,117 @@ public class LoginFrame extends javax.swing.JFrame {
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(51, 51, 51)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(passwordLbl)
-                            .addComponent(idLbl)
-                            .addComponent(idTF)
-                            .addComponent(passwordTF, javax.swing.GroupLayout.DEFAULT_SIZE, 127, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 111, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(serverLbl)
-                            .addComponent(serverCB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(methodLbl)
-                            .addComponent(methodCB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(52, 52, 52))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(loginBtn)
-                        .addGap(18, 18, 18)
-                        .addComponent(errorLbl, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(28, 28, 28))))
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                                .addGap(51, 51, 51)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addGroup(layout.createSequentialGroup()
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                        .addComponent(passwordLbl)
+                                                        .addComponent(idLbl)
+                                                        .addComponent(idTF)
+                                                        .addComponent(passwordTF, javax.swing.GroupLayout.DEFAULT_SIZE, 127, Short.MAX_VALUE))
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 111, Short.MAX_VALUE)
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addComponent(serverLbl)
+                                                        .addComponent(serverCB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(methodLbl)
+                                                        .addComponent(methodCB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addGap(52, 52, 52))
+                                        .addGroup(layout.createSequentialGroup()
+                                                .addComponent(loginBtn)
+                                                .addGap(18, 18, 18)
+                                                .addComponent(errorLbl, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addGap(28, 28, 28))))
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(34, 34, 34)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(serverLbl)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(serverCB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(idLbl)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(idTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(passwordLbl)
-                    .addComponent(methodLbl))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(methodCB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(passwordTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(27, 27, 27)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(loginBtn)
-                    .addComponent(errorLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(40, Short.MAX_VALUE))
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                                .addGap(34, 34, 34)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(layout.createSequentialGroup()
+                                                .addComponent(serverLbl)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(serverCB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGroup(layout.createSequentialGroup()
+                                                .addComponent(idLbl)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addComponent(idTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(passwordLbl)
+                                        .addComponent(methodLbl))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(methodCB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(passwordTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(27, 27, 27)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(loginBtn)
+                                        .addComponent(errorLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addContainerGap(40, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>                        
 
-    private void serverCBActionPerformed(java.awt.event.ActionEvent evt) {                                         
-        String serverChoice = (String)this.serverCB.getSelectedItem();
-        if(serverChoice.equals("PHP"))
+    private void serverCBActionPerformed(java.awt.event.ActionEvent evt) {
+        String serverChoice = (String) this.serverCB.getSelectedItem();
+        if (serverChoice.equals("PHP")) {
             client.setServerURL(HTTPAssignmentClient.PHPServerAddress);
-        else
+        } else {
             client.setServerURL(HTTPAssignmentClient.servletServerAddress);
-    }                                        
+        }
+    }
 
-    private void methodCBActionPerformed(java.awt.event.ActionEvent evt) {                                         
-        String methodChoice = (String)this.methodCB.getSelectedItem();
-        if(methodChoice.equals("GET"))
+    private void methodCBActionPerformed(java.awt.event.ActionEvent evt) {
+        String methodChoice = (String) this.methodCB.getSelectedItem();
+        if (methodChoice.equals("GET")) {
             client.setMethod("GET");
-        else
+        } else {
             client.setMethod("POST");
-    }                                        
+        }
+    }
 
-    private void idTFActionPerformed(java.awt.event.ActionEvent evt) {                                     
+    private void idTFActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
-    }                                    
+    }
 
-    private void loginBtnActionPerformed(java.awt.event.ActionEvent evt) {                                         
+    private void loginBtnActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
-    }                                        
+    }
 
-    private void loginBtnMouseClicked(java.awt.event.MouseEvent evt) {                                      
+    private void loginBtnMouseClicked(java.awt.event.MouseEvent evt) {
         String employeeID = this.idTF.getText();
+        MessageDigest md = null;
+        try {
+            md = MessageDigest.getInstance("SHA-256");
+        } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(LoginFrame.class.getName()).log(Level.SEVERE, null, ex);
+            return;
+        }
         String password = new String(this.passwordTF.getPassword());
-        JSONObject response = client.authenticate(employeeID, password);
+        md.update(password.getBytes());
+        byte[] hashedBytes = md.digest();
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < hashedBytes.length; i++) {
+            sb.append(Integer.toString((hashedBytes[i] & 0xff) + 0x100, 16).substring(1));
+        }
+        String hashedPassword = sb.toString();
+        System.out.println(hashedPassword);
+        JSONObject response = client.authenticate(employeeID, hashedPassword);
         if ((boolean) response.get("success")) {
-            Date date = new Date((long)response.get("lastLogIn"));
-            MainFrame mf = new MainFrame(client,date,employeeID);
+            Date date = new Date((long) response.get("lastLogIn"));
+            MainFrame mf = new MainFrame(client, date, employeeID);
             mf.setTitle("Inventory");
             mf.setLocationRelativeTo(this);
             mf.setVisible(true);
             this.dispose();
-        }
-        else
+        } else {
             this.errorLbl.setText("Employee ID and password don't match");
+        }
 
-    }                                     
+    }
 
     /**
      * @param args the command line arguments

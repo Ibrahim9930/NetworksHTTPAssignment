@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 09, 2020 at 12:17 PM
+-- Generation Time: May 09, 2020 at 01:33 PM
 -- Server version: 10.1.38-MariaDB
--- PHP Version: 7.1.27
+-- PHP Version: 7.3.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -39,8 +39,8 @@ CREATE TABLE `employees` (
 --
 
 INSERT INTO `employees` (`id`, `password`, `last_access`) VALUES
-(1, '12345', 1589016215320),
-(2, '123', 2000);
+(1, 'fc5143cea3db1874ab7fe944961268e6110a01b6c1a6f2fdddbb59c0582c77c5', 1589022877882),
+(2, '089542505d659cecbb988bb5ccff5bccf85be2dfa8c221359079aee2531298bb', 1589023981607);
 
 -- --------------------------------------------------------
 
@@ -60,7 +60,7 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`id`, `name`, `amount`, `price`) VALUES
-(1, 'laptop', 10, 2450.99),
+(1, 'laptop', 20, 2450.99),
 (2, 'PC', 40, 2499.99),
 (3, 'smartphone', 100, 200.99);
 
@@ -94,7 +94,7 @@ ALTER TABLE `employees`
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
