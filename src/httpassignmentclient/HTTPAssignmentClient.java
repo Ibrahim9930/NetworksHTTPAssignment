@@ -28,10 +28,10 @@ import org.json.simple.parser.ParseException;
  * @author masri
  */
 public class HTTPAssignmentClient {
-    public static String PHPServerAddress = "http://localhost/NetProject";
-    public static String servletServerAddress = "http://localhost:15000/HTTPAssignmentServlet";
-    private String method = "POST";
-    private String serverURL = "http://localhost/NetProject";
+    public static String PHPServerAddress = "http://localhost:80/PHPServer";
+    public static String servletServerAddress = "http://localhost:8000/ServletServer";
+    private String method = "GET";
+    private String serverURL = PHPServerAddress;
 
     public void setMethod(String method) {
         this.method = method;
@@ -49,6 +49,7 @@ public class HTTPAssignmentClient {
     
     String sendDataGet(String resource, String[] keys, String[] values) {
         String response = "";
+        if(this.serverURL.equals(PHPServerAddress)) resource += ".php";
         int responseByte;
         String connectionAddress = serverURL + "/" + resource + "?";
         
@@ -60,6 +61,8 @@ public class HTTPAssignmentClient {
             }
         }
         try {
+            System.out.println(connectionAddress);
+            System.out.println(this.method);
             URL url = new URL(connectionAddress);
             URLConnection con = url.openConnection();
             InputStream is = con.getInputStream();
@@ -80,6 +83,7 @@ public class HTTPAssignmentClient {
 
     String sendDataPost(String resource, String[] keys, String[] values) {
         String response = "";
+        if(this.serverURL.equals(PHPServerAddress)) resource += ".php";
         int responseByte;
         String requestBody = "";
 
@@ -96,6 +100,8 @@ public class HTTPAssignmentClient {
             }
         }
         try {
+            System.out.println(connectionAddress);
+            System.out.println(this.method);
             URL url = new URL(connectionAddress);
             URLConnection con = url.openConnection();
             con.setDoOutput(true);
@@ -125,14 +131,19 @@ public class HTTPAssignmentClient {
     public JSONObject authenticate(String employeeID,String password){
         String serverResponse;
         JSONParser parser = new JSONParser();
-        if(method.equals("get"))
-            serverResponse = sendDataGet("index.php",new String[]{"id","password"},new String[]{employeeID,password});
-        else
-            serverResponse = sendDataPost("index.php",new String[]{"id","password"},new String[]{employeeID,password});
+        if(employeeID.equals("") || password.equals("")){
+            serverResponse = "{\"success\":false}";
+        }
+        else{
+            if(method.equals("get"))
+                serverResponse = sendDataGet("index",new String[]{"id","password"},new String[]{employeeID,password});
+            else
+                serverResponse = sendDataPost("index",new String[]{"id","password"},new String[]{employeeID,password});
+        }
 
         JSONObject response = new JSONObject();
         try {
-            
+            System.out.println(serverResponse);
             response = (JSONObject) parser.parse(serverResponse);
         } catch (ParseException ex) {
             Logger.getLogger(HTTPAssignmentClient.class.getName()).log(Level.SEVERE, null, ex);
@@ -145,9 +156,9 @@ public class HTTPAssignmentClient {
         String serverResponse;
         JSONParser parser = new JSONParser();
         if(method.equals("get"))
-            serverResponse = sendDataGet("change_password.php",new String[]{"id","newPassword"},new String[]{employeeID,newPassword});
+            serverResponse = sendDataGet("change_password",new String[]{"id","newPassword"},new String[]{employeeID,newPassword});
         else
-            serverResponse = sendDataPost("change_password.php",new String[]{"id","newPassword"},new String[]{employeeID,newPassword});
+            serverResponse = sendDataPost("change_password",new String[]{"id","newPassword"},new String[]{employeeID,newPassword});
         JSONObject response = new JSONObject();
         try {
             response = (JSONObject) parser.parse(serverResponse);
@@ -163,9 +174,9 @@ public class HTTPAssignmentClient {
         String serverResponse;
         JSONParser parser = new JSONParser();
         if(method.equals("get"))
-            serverResponse = sendDataGet("get_product.php",new String[]{"productID"},new String[]{productID});
+            serverResponse = sendDataGet("get_product",new String[]{"productID"},new String[]{productID});
         else
-            serverResponse = sendDataPost("get_product.php",new String[]{"productID"},new String[]{productID});
+            serverResponse = sendDataPost("get_product",new String[]{"productID"},new String[]{productID});
         JSONObject response = new JSONObject();
         try {
             System.out.println(serverResponse);
@@ -190,9 +201,9 @@ public class HTTPAssignmentClient {
         String serverResponse;
         JSONParser parser = new JSONParser();
         if(method.equals("get"))
-            serverResponse = sendDataGet("add_product.php",new String[]{"productID","amount"},new String[]{productID,amount});
+            serverResponse = sendDataGet("add_product",new String[]{"productID","amount"},new String[]{productID,amount});
         else
-            serverResponse = sendDataPost("add_product.php",new String[]{"productID","amount"},new String[]{productID,amount});
+            serverResponse = sendDataPost("add_product",new String[]{"productID","amount"},new String[]{productID,amount});
         JSONObject response = new JSONObject();
         try {
             System.out.println(serverResponse);
@@ -208,9 +219,9 @@ public class HTTPAssignmentClient {
         String serverResponse;
         JSONParser parser = new JSONParser();
         if(method.equals("get"))
-            serverResponse = sendDataGet("withdraw_product.php",new String[]{"productID","amount"},new String[]{productID,amount});
+            serverResponse = sendDataGet("withdraw_product",new String[]{"productID","amount"},new String[]{productID,amount});
         else
-            serverResponse = sendDataPost("withdraw_product.php",new String[]{"productID","amount"},new String[]{productID,amount});
+            serverResponse = sendDataPost("withdraw_product",new String[]{"productID","amount"},new String[]{productID,amount});
         JSONObject response = new JSONObject();
         try {
             response = (JSONObject) parser.parse(serverResponse);
@@ -226,9 +237,9 @@ public class HTTPAssignmentClient {
         String serverResponse;
         JSONParser parser = new JSONParser();
         if(method.equals("get"))
-            serverResponse = sendDataGet("get_all_products.php",new String[]{},new String[]{});
+            serverResponse = sendDataGet("get_all_products",new String[]{},new String[]{});
         else
-            serverResponse = sendDataPost("get_all_products.php",new String[]{},new String[]{});
+            serverResponse = sendDataPost("get_all_products",new String[]{},new String[]{});
         Object response = new Object();
         try {
             System.out.println(serverResponse);
