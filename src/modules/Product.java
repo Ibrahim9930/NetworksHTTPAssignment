@@ -94,7 +94,8 @@ public class Product {
         String response = "";
         JSONParser parser = new JSONParser();
         int responseByte;
-        String connectionAddress = "https://api.exchangeratesapi.io/latest?symbols=EUR&base=USD";
+//        String connectionAddress = "https://api.exchangeratesapi.io/latest?symbols=EUR&base=USD";
+        String connectionAddress = "http://data.fixer.io/api/latest?access_key=a8b63533a09942bb7a4827ef59f8094b&symbols=USD";
         try {
             URL url = new URL(connectionAddress);
             URLConnection con = url.openConnection();
@@ -113,9 +114,8 @@ public class Product {
                 Logger.getLogger(HTTPAssignmentClient.class.getName()).log(Level.SEVERE, null, ex);
             }
             JSONObject rates = (JSONObject) obj.get("rates");
-            this.pricePerItemEUR = (this.pricePerItem * (double) rates.get("EUR"));
-        } 
-        catch (Exception e) {
+            this.pricePerItemEUR = (this.pricePerItem * (1/(double) rates.get("USD")));
+        } catch (Exception e) {
             System.err.println("Exception occured while converting currencies");
             System.err.println(e);
             this.pricePerItemEUR = 0;
