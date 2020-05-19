@@ -46,7 +46,7 @@ public class Product {
     }
 
     public Product(JSONObject obj) {
-        this.id = (String) obj.get("id");
+        this.id = obj.get("id") + "";
         this.name = (String) obj.get("name");
         this.amount = (int) (long) obj.get("amount");
         this.pricePerItem = (double) obj.get("pricePerItem");

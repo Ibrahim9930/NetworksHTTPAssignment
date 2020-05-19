@@ -189,7 +189,7 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void lookupProductBtnActionPerformed(java.awt.event.ActionEvent evt) {                                                 
         this.productPnl.removeAll();
-        String id = JOptionPane.showInputDialog(this, "Pleases enter the product id");
+        String id = JOptionPane.showInputDialog(this, "Please enter the product id");
         if (id == null) {
             return;
         }
